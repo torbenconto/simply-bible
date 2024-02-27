@@ -13,11 +13,6 @@ import (
 	"strings"
 )
 
-type Verse struct {
-	Name string
-	Text string
-}
-
 func init() {
 	log.Println("Initializing versions...")
 	// Check over the versions and download them if they are not already downloaded
@@ -89,14 +84,14 @@ func main() {
 		// Load the version file
 		newBible.LoadSourceFile(file)
 
-		verses := []Verse{}
+		verses := []bible.Verse{}
 
 		for _, b := range newBible.Books {
 			if strings.ToLower(b.Name) == book {
 				for _, c := range b.Chapters {
 					if c.Number == chapterInt {
 						for _, v := range c.Verses {
-							verses = append(verses, Verse{Name: v.Name, Text: v.Text})
+							verses = append(verses, bible.Verse{Name: v.Name, Text: v.Text})
 						}
 					}
 				}
