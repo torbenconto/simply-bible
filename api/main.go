@@ -1,76 +1,50 @@
 package main
 
 import (
-	"encoding/json"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/torbenconto/bible"
+	"github.com/torbenconto/bible/api/util"
 	"github.com/torbenconto/bible/versions"
-	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
-// TODO : Organize routes and handlers
-// TODO : Add error handling
-// TODO : Implement verse route and ai routes (use bearer token)
-
 func init() {
 	log.Println("Initializing versions...")
-	// Check over the versions and download them if they are not already downloaded
 	for _, version := range versions.Versions {
 		log.Println("Initializing version", version.Name)
-		versionPath := filepath.Join("./versions/", strings.ToLower(version.Name))
-		if _, err := os.Stat(versionPath); os.IsNotExist(err) {
-			os.MkdirAll(versionPath, 0755)
+
+		err := util.InitVersion(version)
+		if err != nil {
+			log.Println("Failed to initialize version", version.Name, ":", err)
+			continue
 		}
 
-		if _, err := os.Stat(filepath.Join(versionPath, version.Path)); os.IsNotExist(err) {
-			file, err := os.Create(filepath.Join(versionPath, version.Path))
-			if err != nil {
-				log.Fatalf("Failed to create version file: %v", err)
-			}
-			defer file.Close()
-
-			resp, err := http.Get(version.Url)
-			if err != nil {
-				log.Fatalf("Failed to download version file: %v", err)
-			}
-			defer resp.Body.Close()
-
-			_, err = io.Copy(file, resp.Body)
-			if err != nil {
-				log.Fatalf("Failed to write version file: %v", err)
-			}
-		}
 		log.Println("Initialized version", version.Name)
 	}
 	log.Println("Versions initialized")
 }
 
 func main() {
-	mux := http.NewServeMux()
+	r := gin.Default()
 
-	mux.HandleFunc("/bible", func(w http.ResponseWriter, r *http.Request) {
-		version := strings.ToUpper(r.URL.Query().Get("version"))
-		book := strings.ToLower(r.URL.Query().Get("book"))
-		chapter := r.URL.Query().Get("chapter")
+	r.Use(cors.Default()) // Add CORS middleware
 
-		chapterInt, err := strconv.Atoi(chapter)
-		if err != nil {
-			http.Error(w, "Invalid chapter", http.StatusBadRequest)
-			return
-		}
+	r.GET("/book/:book", func(c *gin.Context) {
+		version := strings.ToUpper(c.Query("version"))
+		book := strings.ToLower(c.Param("book"))
 
 		if _, ok := versions.VersionMap[version]; !ok {
-			http.Error(w, "Invalid version", http.StatusBadRequest)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid version"})
 			return
 		}
 
 		if book == "" {
-			http.Error(w, "Invalid book", http.StatusBadRequest)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book"})
 			return
 		}
 
@@ -78,40 +52,82 @@ func main() {
 
 		versionPath := filepath.Join("./versions", strings.ToLower(version))
 
-		// Open the version file
 		file, err := os.Open(filepath.Join(versionPath, versions.VersionMap[version].Path))
 		if err != nil {
-			http.Error(w, "Failed to open version file", http.StatusInternalServerError)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open version file"})
 			return
 		}
+		defer file.Close()
 
-		// Load the version file
 		newBible.LoadSourceFile(file)
-
-		verses := []bible.Verse{}
 
 		for _, b := range newBible.Books {
 			if strings.ToLower(b.Name) == book {
-				for _, c := range b.Chapters {
-					if c.Number == chapterInt {
-						for _, v := range c.Verses {
-							verses = append(verses, bible.Verse{Name: v.Name, Text: v.Text})
-						}
-					}
-				}
+				c.JSON(http.StatusOK, b)
+				return
 			}
 		}
 
-		jsonVerses, err := json.Marshal(verses)
-		if err != nil {
-			http.Error(w, "Failed to convert verses to JSON", http.StatusInternalServerError)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Book not found"})
+	})
+
+	r.GET("/versions", func(c *gin.Context) {
+		c.JSON(http.StatusOK, versions.Versions)
+	})
+
+	r.GET("/books", func(c *gin.Context) {
+		version := strings.ToUpper(c.Query("version"))
+
+		if _, ok := versions.VersionMap[version]; !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid version"})
 			return
 		}
 
-		w.Write(jsonVerses)
+		b, err := util.LoadVersion(versions.VersionMap[version])
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load version"})
+			return
+		}
 
-		file.Close()
+		// Return book names only
+		var bookNames []string
+		for _, book := range b.Books {
+			bookNames = append(bookNames, book.Name)
+		}
+		c.JSON(http.StatusOK, bookNames)
 	})
 
-	http.ListenAndServe(":8080", mux)
+	r.GET("/chaptercount/:book", func(c *gin.Context) {
+		version := strings.ToUpper(c.Query("version"))
+		book := strings.ToLower(c.Param("book"))
+
+		if _, ok := versions.VersionMap[version]; !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid version"})
+			return
+		}
+
+		if book == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book"})
+			return
+		}
+
+		newBible, err := util.LoadVersion(versions.VersionMap[version])
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load version"})
+			return
+		}
+
+		for _, b := range newBible.Books {
+			if strings.ToLower(b.Name) == book {
+				c.JSON(http.StatusOK, len(b.Chapters))
+				return
+			}
+		}
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Book not found"})
+	})
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Failed to start server: ", err)
+	}
 }

@@ -3,7 +3,7 @@ enum Versions {
     NIV = "NIV",
     ESV = "ESV",
     KJV = "KJV",
-    NKJv = "NKJV",
+    NKJV = "NKJV",
     ASV = "ASV",
     BSB = "BSB",
     NASB = "NASB",
@@ -16,4 +16,5 @@ enum Versions {
     CSB = "CSB",
 }
 
+export type Version = keyof typeof Versions;
 export default Versions;
