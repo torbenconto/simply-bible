@@ -13,6 +13,10 @@ import (
 	"strings"
 )
 
+// TODO : Organize routes and handlers
+// TODO : Add error handling
+// TODO : Implement verse route and ai routes (use bearer token)
+
 func init() {
 	log.Println("Initializing versions...")
 	// Check over the versions and download them if they are not already downloaded
