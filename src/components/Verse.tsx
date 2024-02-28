@@ -32,9 +32,9 @@ function Verse({ verse, version }: { verse: VerseI, version: Version}) {
             </span>
             {modalOpen && (
                 <Modal onClose={closeModal}>
-                    <h1 className="text-3xl font-semibold py-2">{verse.Name}</h1>
+                    <h1 className="md:text-3xl text-xl font-semibold py-2">{verse.Name}</h1>
                     <p>{verse.Text}</p>
-                    <h1 className="text-3xl font-semibold mt-4">✨ Ai Explanation</h1>
+                    <h1 className="md:text-3xl text-xl font-semibold mt-4">✨ Ai Explanation</h1>
                     {explanation ? (
                         <p>{explanation}</p>
                     ) : (

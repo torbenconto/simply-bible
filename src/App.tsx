@@ -99,8 +99,8 @@ function App() {
                 SimplyBible - Made with ❤️ by <a href="github.com/torbenconto">Torben Conto</a>
                 <a href="https://tconto.tech">My Website</a>
             </div>
-
-            <div className="fixed bottom-0 left-0 w-full flex justify-between p-4 md:hidden mb-5">
+            {/* Positioning for mobile view */}
+            <div className="fixed bottom-0 left-0 w-full flex justify-between p-4 md:hidden">
                 <button
                     className="bg-blue-500 rounded-full h-10 w-10  text-white font-bold "
                     onClick={goToPrevious}>
@@ -114,7 +114,6 @@ function App() {
             </div>
         </div>
     );
-
 }
 
 export default App;
