@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Book } from "../bible/books.ts";
-import { GetChapterCount } from "../bible/bible.ts";
+import { GetChapterCount } from "../bible/api.ts";
 import { Version } from "../bible/versions.ts";
 
 function SelectChapter({ book, chapter, version, setChapter }: { book: Book, chapter: number, version: Version, setChapter: React.Dispatch<React.SetStateAction<number>> }) {

@@ -4,7 +4,7 @@ function Verse({verse}: {verse: VerseI}) {
     const verseNumber = verse.Name.split(":")[1];
 
     return (
-        <span className="text-sm px-0.5">{verse.Text}<span className="text-xs pl-0.5 text-gray-400">{verseNumber}</span></span>
+        <span className="text-lg px-0.5">{verse.Text}<span className="text-xs pl-0.5 text-gray-400">{verseNumber}</span></span>
     );
 }
 
