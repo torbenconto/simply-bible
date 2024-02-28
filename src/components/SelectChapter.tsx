@@ -13,7 +13,7 @@ function SelectChapter({ book, chapter, version, setChapter }: { book: Book, cha
     }, [version, book]);
 
     return (
-        <select className="p-2 text-white bg-blue-400" value={chapter} onChange={(e) => setChapter(Number(e.target.value))}>
+        <select className="p-2 text-white bg-blue-400 rounded-none" value={chapter} onChange={(e) => setChapter(Number(e.target.value))}>
             {Array.from({ length: chapterCount }, (_, i) => i + 1).map((chapterNumber) => (
                 <option key={chapterNumber} value={chapterNumber}>{chapterNumber}</option>
             ))}
