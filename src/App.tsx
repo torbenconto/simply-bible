@@ -102,12 +102,12 @@ function App() {
 
             <div className="fixed bottom-0 left-0 w-full flex justify-between p-4 md:hidden mb-5">
                 <button
-                    className="bg-blue-500 rounded-full h-12 w-12 hover:bg-blue-700 text-white font-bold py-2 px-4 "
+                    className="bg-blue-500 rounded-full h-10 w-10  text-white font-bold "
                     onClick={goToPrevious}>
                     &lt;
                 </button>
                 <button
-                    className="bg-blue-500 rounded-full h-12 w-12 hover:bg-blue-700 text-white font-bold py-2 px-4 "
+                    className="bg-blue-500 rounded-full h-10 w-10 text-white font-bold"
                     onClick={goToNext}>
                     &gt;
                 </button>
