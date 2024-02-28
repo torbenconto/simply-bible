@@ -14,6 +14,7 @@ function Verse({ verse, version }: { verse: VerseI, version: Version}) {
     };
 
     const closeModal = () => {
+        setExplanation(""); // Clear the explanation when the modal is closed
         setModalOpen(false);
     };
 
@@ -31,20 +32,28 @@ function Verse({ verse, version }: { verse: VerseI, version: Version}) {
                 <span className="text-xs pl-0.5 text-gray-400">{verseNumber}</span>
             </span>
             {modalOpen && (
-                <Modal onClose={closeModal}>
-                    <h1 className="md:text-3xl text-xl font-semibold py-2">{verse.Name}</h1>
-                    <p>{verse.Text}</p>
-                    <h1 className="md:text-3xl text-xl font-semibold mt-4">✨ Ai Explanation</h1>
-                    {explanation ? (
-                        <p>{explanation}</p>
-                    ) : (
-                        <button className="bg-blue-500 rounded-full h-12 hover:bg-blue-700 text-white md:block font-bold py-2 px-4 " onClick={generateExplanation} >
-                            Generate
-                        </button>
-                        )}
+                <div className="w-full h-full">
+                    <Modal onClose={closeModal}>
+                        <div className="flex flex-col h-full">
 
-                </Modal>
-            )}
+                            <h1 className="md:text-3xl text-xl font-semibold py-2">{verse.Name}</h1>
+                            <p>{verse.Text}</p>
+                            <h1 className="md:text-3xl text-xl font-semibold mt-4">✨ Ai Explanation</h1>
+                            {explanation ? (
+                                <textarea
+                                    className="w-full flex-grow appearance-none resize-none overflow-auto"
+                                    value={explanation}></textarea>
+                            ) : (
+                                <button
+                                    className="bg-blue-500 rounded-full h-12 hover:bg-blue-700 text-white md:block font-bold py-2 px-4 "
+                                    onClick={generateExplanation}>
+                                    Generate
+                                </button>
+                            )}
+                        </div>
+                    </Modal>
+                </div>
+                )}
         </>
     );
 }
