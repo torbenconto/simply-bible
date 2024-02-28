@@ -20,3 +20,8 @@ export async function GetChapterCount(version: Version, book: Book): Promise<num
     const chapterCountReq = await axios.get(`http://localhost:8080/chaptercount/${book}?version=${version}`)
     return chapterCountReq.data;
 }
+
+export async function Explain(verse: string, version: Version): Promise<string> {
+    const explainReq = await axios.get(`http://localhost:8080/explain/${verse}?version=${version}`)
+    return explainReq.data;
+}

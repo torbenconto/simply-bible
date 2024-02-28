@@ -82,7 +82,7 @@ function App() {
                         <h1 className="text-3xl font-semibold py-2">{book} {chapter}</h1>
                         {data.Chapters[chapter - 1].Verses.map((verse: VerseI) => {
                             return (
-                                <Verse verse={verse}/>
+                                <Verse version={version} verse={verse}/>
                             );
                         })}
                     </div>
