@@ -77,6 +77,8 @@ github.com/torbenconto/bible v0.0.2 h1:e6J9B91NP59Gi4tcQ8MtqGN7Emj5Qd+OhVczTrU3A
 github.com/torbenconto/bible v0.0.2/go.mod h1:oqz4z9Rj/wHSz5cAz3Dp8XWtiL2gb1nTdTf6jpsbKpQ=
 github.com/torbenconto/bible v0.0.3 h1:0OE4I+Okt8DXHAp1rfrPQtslwOvLy5K7mLNhReyJ6Po=
 github.com/torbenconto/bible v0.0.3/go.mod h1:oqz4z9Rj/wHSz5cAz3Dp8XWtiL2gb1nTdTf6jpsbKpQ=
+github.com/torbenconto/bible v1.0.0 h1:DB4ji2F/8oRMx7ENxu0h8oUe7gocbPIb5CPJKOxK9Yk=
+github.com/torbenconto/bible v1.0.0/go.mod h1:oqz4z9Rj/wHSz5cAz3Dp8XWtiL2gb1nTdTf6jpsbKpQ=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=

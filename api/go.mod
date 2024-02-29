@@ -2,7 +2,7 @@ module github.com/torbenconto/bible/api
 
 go 1.22.0
 
-require github.com/torbenconto/bible v0.0.3
+require github.com/torbenconto/bible v1.0.0
 
 require (
 	github.com/bytedance/sonic v1.10.1 // indirect
